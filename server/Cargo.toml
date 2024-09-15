@@ -1,0 +1,10 @@
+[package]
+name = "connect4000-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+connect4000-core = { path = "../core" }
+log = "0.4.22"
+tokio = "1.40.0"
+wtransport = "0.3.1"

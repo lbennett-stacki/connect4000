@@ -1,0 +1,12 @@
+[package]
+name = "connect4000-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+connect4000-core = { path = "../core" }
+connect4000-server = { path = "../server" }
+env_logger = "0.11.5"
+log = "0.4.22"
+tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+wtransport = { version = "0.3.1", features = ["dangerous-configuration"] }
