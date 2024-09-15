@@ -1,0 +1,24 @@
+{
+  "name": "@lbennett/connect4000-web",
+  "type": "module",
+  "description": "Web app for connect4000",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "node build/build.js",
+    "dev": "npm-run-all -p dev:*",
+    "dev:build": "node build/dev.js",
+    "dev:serve": "http-server public --silent",
+    "format": "prettier . --write",
+    "browser": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --ignore-certificate-errors --enable-webtransport"
+  },
+  "author": "Luke Bennett <lbennett@fastmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@webgpu/types": "^0.1.46",
+    "esbuild": "0.24.0",
+    "http-server": "^14.1.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.3.3",
+    "typescript": "^5.6.2"
+  }
+}
