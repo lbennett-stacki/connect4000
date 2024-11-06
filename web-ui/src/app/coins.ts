@@ -1,5 +1,5 @@
 import { Coin } from '../net/stream';
-import { RenderableCoin } from '../render/render';
+import { RenderableCoin } from '../render/types';
 import { getDiscPosition } from './interaction';
 
 export const makeRenderableCoins = (coins: Coin[][]): RenderableCoin[] => {

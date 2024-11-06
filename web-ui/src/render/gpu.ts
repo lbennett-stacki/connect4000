@@ -64,6 +64,7 @@ async function createGridRenderPipeline({
   buffers: GPUVertexBufferLayout[];
 }) {
   const pipeline = device.createRenderPipeline({
+    label: 'grid',
     layout: 'auto',
     vertex: {
       module: vertexModule,
@@ -101,6 +102,7 @@ async function createCoinRenderPipeline({
   buffers: GPUVertexState['buffers'];
 }) {
   const pipeline = device.createRenderPipeline({
+    label: 'coin',
     layout: 'auto',
     vertex: {
       module: vertexModule,
@@ -132,25 +134,32 @@ export async function createRenderPipelines({
   format: GPUTextureFormat;
 }) {
   const vertexModule = device.createShaderModule({
+    label: 'vertex',
     code: vertex,
   });
 
   const fragmentModule = device.createShaderModule({
+    label: 'fragment',
     code: fragment,
   });
-  const buffers = [
+  const buffers: GPUVertexBufferLayout[] = [
     {
-      arrayStride: 5 * 4, // position (2 floats) + color (3 floats)
+      arrayStride: 36,
       attributes: [
         {
           shaderLocation: 0,
           offset: 0,
-          format: 'float32x2' as const,
+          format: 'float32x3' as const, // Position
         },
         {
           shaderLocation: 1,
-          offset: 2 * 4,
-          format: 'float32x3' as const,
+          offset: 12,
+          format: 'float32x3' as const, // Normal
+        },
+        {
+          shaderLocation: 2,
+          offset: 24,
+          format: 'float32x3' as const, // Color
         },
       ],
     },

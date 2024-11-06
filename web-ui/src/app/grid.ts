@@ -1,4 +1,4 @@
-import { GridDimensions } from '../render/render';
+import { GridDimensions } from '../render/types';
 
 export const renderGrid = (dimensions: GridDimensions): Uint8Array[] => {
   const row = new Uint8Array(dimensions.rows).fill(0);

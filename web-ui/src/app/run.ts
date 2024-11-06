@@ -1,22 +1,18 @@
 import { Color } from '../colors';
 import { PayloadType, ViewSubscription } from '../net/stream';
 import { initWebGPU, resizeCanvasToDisplaySize } from '../render/gpu';
-import {
-  GridDimensions,
-  initRender,
-  render,
-  RenderableCoin,
-} from '../render/render';
+import { initRender } from '../render/init';
+import { render } from '../render/render';
+import { GridDimensions, RenderableCoin } from '../render/types';
 import { resetCamera } from './camera';
 import { makeRenderableCoins } from './coins';
 import { MIN_ROWS } from './const';
 import { renderGrid } from './grid';
 import { getDiscPosition } from './interaction';
 import {
-  adjustScale,
+  // adjustScale,
   getMousePosition,
-  getProjectedMousePosition,
-  translateCamera,
+  // getProjectedMousePosition,
 } from './mouse';
 
 export interface Coords {
@@ -45,8 +41,8 @@ export const runApp = async ({
     console.log({ aspectRatio });
   };
   const dimensions: GridDimensions = {
-    columns: 0,
-    rows: 0,
+    columns: 4,
+    rows: 4,
   };
 
   let camera = resetCamera(dimensions);
@@ -90,7 +86,7 @@ export const runApp = async ({
 
   let mouseDownPosition: Coords | null = null;
   let startingMouseDownPosition: Coords | null = null;
-  let mousePosition: Coords | null = null;
+  // let mousePosition: Coords | null = null;
 
   const onMouseDown = (event: MouseEvent) => {
     mouseDownPosition = getMousePosition(event);
@@ -99,31 +95,40 @@ export const runApp = async ({
 
   canvas.addEventListener('mousedown', onMouseDown);
 
-  const onWheel = (event: WheelEvent) => {
-    camera = adjustScale(event, canvas, camera, aspectRatio);
-    mousePosition = getProjectedMousePosition(
-      event,
-      canvas,
-      camera,
-      aspectRatio
-    );
+  const onWheel = (_event: WheelEvent) => {
+    // camera = adjustScale(event, canvas, camera, aspectRatio);
+    // mousePosition = getProjectedMousePosition(
+    //   event,
+    //   canvas,
+    //   camera,
+    //   aspectRatio
+    // );
   };
 
   canvas.addEventListener('wheel', onWheel);
 
+  let angleX = 0;
+  let angleY = 0;
+
   const onMouseMove = (event: MouseEvent) => {
-    mousePosition = getProjectedMousePosition(
-      event,
-      canvas,
-      camera,
-      aspectRatio
-    );
+    // mousePosition = getProjectedMousePosition(
+    //   event,
+    //   canvas,
+    //   camera,
+    //   aspectRatio
+    // );
 
     if (!mouseDownPosition) {
       return;
     }
 
-    camera = translateCamera(event, camera, mouseDownPosition);
+    const deltaX = event.clientX - mouseDownPosition.x;
+    const deltaY = event.clientY - mouseDownPosition.y;
+    angleX = deltaX * 0.01;
+    angleY = deltaY * 0.01;
+
+    // camera = translateCamera(event, camera, mouseDownPosition);
+    camera.orbit(angleX, angleY);
 
     mouseDownPosition.x = event.clientX;
     mouseDownPosition.y = event.clientY;
@@ -145,12 +150,17 @@ export const runApp = async ({
       return;
     }
 
-    const rect = canvas.getBoundingClientRect();
+    // const rect = canvas.getBoundingClientRect();
 
-    const normalizedX =
-      (((event.clientX - rect.left) / rect.width) * 2 - 1) * aspectRatio;
+    // const normalizedX =
+    //   (((event.clientX - rect.left) / rect.width) * 2 - 1) * aspectRatio;
 
-    const projectedX = normalizedX / camera.scale - camera.x;
+    // const projectedX = normalizedX / camera.scale - camera.x;
+    const projectedX = 0;
+    console.warn(
+      'USING DEV PROJECTED X MOUSE CLICK POSITION - REPLACING WITH RAY TRACING'
+    );
+    // TODO: ray trace column;
 
     const column = Math.floor(projectedX);
 
@@ -200,7 +210,7 @@ export const runApp = async ({
     const {
       grid,
       coin,
-      mouse,
+      // mouse,
       uniformBuffer: renderBuffer,
     } = initRender({
       dimensions,
@@ -216,13 +226,14 @@ export const runApp = async ({
     render({
       aspectRatio,
       device,
+      canvas,
       context,
       grid,
       coin,
       coins,
-      mouse,
-      mousePosition,
-      winnerId,
+      // mouse,
+      // mousePosition,
+      // winnerId,
     });
 
     if (gameLoopTimeout) {
